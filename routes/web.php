@@ -16,3 +16,22 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::prefix('admin')->namespace('Admin')->group(function () {
+    // Matches The "/admin/users" URL
+    // Controllers Within The "App\Http\Controllers\Admin" Namespace
+    
+    // https://laravel.com/api/7.x/Illuminate/Routing/Router.html#method_get
+    // https://github.com/laravel/framework/blob/7.x/src/Illuminate/Routing/Router.php#L143
+    /**
+     * Register a new GET route with the router.
+     *
+     * @param  string  $uri
+     * @param  array|string|callable|null  $action
+     * @return \Illuminate\Routing\Route
+     * 
+     * public function get($uri, $action = null)
+     */
+    Route::get('/', 'MainController@index');
+});
