@@ -33,14 +33,14 @@ Route::prefix('admin')->namespace('Admin')->group(function () {
      *
      * public function get($uri, $action = null)
      */
-    Route::get('/', 'MainController@index');
-});
+    Route::get('/', 'MainController@index')->name('admin.index');
 
-/**
- *
- * @param  string  $name - base incoming request URI
- * @param  string  $controller - class name of the controller which is used to handle the request
- *
- * \Illuminate\Routing\PendingResourceRegistration resource(string $name, string $controller, array $options = [])
-*/
-Route::resource('admin/categories', 'Admin\CategoryController');
+    /**
+     *
+     * @param  string  $name - base incoming request URI
+     * @param  string  $controller - class name of the controller which is used to handle the request
+     *
+     * \Illuminate\Routing\PendingResourceRegistration resource(string $name, string $controller, array $options = [])
+     */
+    Route::resource('categories', 'CategoryController');
+});
