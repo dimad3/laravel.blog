@@ -43,7 +43,6 @@ Route::prefix('admin')->namespace('Admin')->group(function () {
      * \Illuminate\Routing\PendingResourceRegistration resource(string $name, string $controller, array $options = [])
      */
     Route::resource('categories', 'CategoryController');
-
     Route::resource('tags', 'TagController');
-
+    Route::resource('posts', 'PostController');
 });
