@@ -27,23 +27,26 @@
         <div class="card-body">
             <div class="form-group">
                 <label for="title">Название</label>
-                <input type="text" class="form-control" id="title" name="title">
+                <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title">
             </div>
 
             <div class="form-group">
                 <label for='description'>Цитата</label>
-                <textarea name='description' id='description' class="form-control" rows="2"
+                <textarea name='description' id='description'
+                    class="form-control @error('description') is-invalid @enderror" rows="2"
                     placeholder="Цитата ..."></textarea>
             </div>
 
             <div class="form-group">
                 <label for='content'>Контент</label>
-                <textarea name='content' id='content' class="form-control" rows="4" placeholder="Контент ..."></textarea>
+                <textarea name='content' id='content' class="form-control @error('content') is-invalid @enderror" rows="4"
+                    placeholder="Контент ..."></textarea>
             </div>
 
             <div class="form-group">
                 <label for='category_id'>Категория</label>
-                <select name='category_id' id='category_id' class="form-control">
+                <select name='category_id' id='category_id' class="form-control @error('category_id') is-invalid @enderror">
+                    <option value=""></option>
                     @foreach ($categories as $key => $value)
                         <option value="{{ $key }}">{{ $value }}</option>
                     @endforeach

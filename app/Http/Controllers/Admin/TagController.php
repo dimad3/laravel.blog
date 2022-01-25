@@ -61,7 +61,7 @@ class TagController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|unique:tags|max:50',
+            'title' => 'required|unique:tags|max:100',
         ]);
 
         /**

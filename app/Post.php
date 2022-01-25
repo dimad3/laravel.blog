@@ -3,9 +3,16 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Cviebrock\EloquentSluggable\Sluggable;
 
 class Post extends Model
 {
+    use Sluggable;
+
+    protected $fillable = ['title', 'description', 'content', 'category_id', 'thumbnail'];
+
     /**
      * The tags that belong to the Post
      *
@@ -13,7 +20,16 @@ class Post extends Model
      */
     public function tags(): BelongsToMany
     {
-        return $this->belongsToMany(Tag::class);
+        /**
+         * public function withTimestamps($createdAt = null, $updatedAt = null)
+         *
+         * Specify that the pivot table has creation and update timestamps.
+         *
+         * @param  mixed  $createdAt
+         * @param  mixed  $updatedAt
+         * @return $this (BelongsToMany)
+         */
+        return $this->belongsToMany(Tag::class)->withTimestamps();
     }
 
 
@@ -27,4 +43,17 @@ class Post extends Model
         return $this->belongsTo(Category::class);
     }
 
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable()
+    {
+        return [
+            'slug' => [
+                'source' => 'title'
+            ]
+        ];
+    }
 }

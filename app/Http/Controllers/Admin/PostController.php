@@ -86,24 +86,98 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        //dd($request->hasFile('thumbnail'));
+        //dd($request->file('thumbnail'));
         $request->validate([
-            'title' => 'required|unique:posts|max:100',
+            'title' => 'required|max:100',
+            'description' => 'required|max:255',
+            'content' => 'required',
+            'category_id' => 'required|integer',
+            'thumbnail' => 'nullable|image',
         ]);
-        dd($request->all());
+        //return;
 
+        $data = $request->all();
         /**
          * vendor\laravel\framework\src\Illuminate\Http\Concerns\InteractsWithInput.php
-         * public function all($keys = null)
+         * public function hasFile($key)
          *
-         * Get all of the input and files for the request.
+         * Determine if the uploaded data contains a file.
          *
-         * @param  array|mixed|null  $keys
+         * @param  string  $key
+         * @return bool
+         */
+        if ($request->hasFile('thumbnail')) {
+            $folder = date('Y-m-d');
+
+            /**
+             * vendor\laravel\framework\src\Illuminate\Http\UploadedFile.php
+             * public function file($key = null, $default = null)
+             *
+             * Retrieve a file from the request.
+             *
+             * @param  string|null  $key
+             * @param  mixed  $default
+             * @return \Illuminate\Http\UploadedFile|\Illuminate\Http\UploadedFile[]|array|null
+             */
+
+            /**
+             * vendor\laravel\framework\src\Illuminate\Http\UploadedFile.php
+             * public function store($path, $options = [])
+             *
+             * Store the uploaded file on a filesystem disk.
+             * The store method accepts the path where the file should be stored relative to the filesystem's configured root directory.
+             * This path should not contain a file name, since a unique ID will automatically be generated to serve as the file name
+             *
+             * @param  string  $path
+             * @param  array|string  $options
+             * @return string|false
+             */
+            $path = $request->file('thumbnail')->store("images/{$folder}");
+            //dump($path);
+            $data['thumbnail'] = $path;
+            //dump($data);
+        }
+        //dd($request->tags);
+
+        $post = Post::create($data);
+
+        /**
+         * vendor\laravel\framework\src\Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithPivotTable.php
+         * public function sync($ids, $detaching = true)
+         *
+         * Sync the intermediate tables with a list of IDs or collection of models.
+         *
+         * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Model|array  $ids
+         * @param  bool  $detaching
          * @return array
          */
-        Post::create($request->all());
+        $post->tags()->sync($request->tags);
 
-        $request->session()->flash('success', 'Tag was added!!!');
-        return redirect()->route('tags.index');
+        /**
+         * vendor\laravel\framework\src\Illuminate\Routing\Redirector.php
+         * public function route($route, $parameters = [], $status = 302, $headers = [])
+         *
+         * Create a new redirect response to a named route.
+         *
+         * @param  string  $route
+         * @param  mixed  $parameters
+         * @param  int  $status
+         * @param  array  $headers
+         * @return \Illuminate\Http\RedirectResponse
+         */
+
+        /**
+         * vendor\laravel\framework\src\Illuminate\Http\RedirectResponse.php
+         * public function with($key, $value = null)
+         *
+         * Flash a piece of data to the session.
+         *
+         * @param  string|array  $key
+         * @param  mixed  $value
+         * @return $this (\Illuminate\Http\RedirectResponse)
+         */
+        return redirect()->route('posts.index')->with('success', 'Post was added!!!');
     }
 
     /**
