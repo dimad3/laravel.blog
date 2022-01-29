@@ -39,11 +39,12 @@
                                     <table class="table table-bordered table-hover text-nowrap">
                                         <thead>
                                             <tr>
-                                                <th style="width: 30px">#</th>
+                                                <th style="width: 30px">ID</th>
                                                 <th>Наименование</th>
                                                 <th>Категория</th>
                                                 <th>Теги</th>
-                                                <th>Дата</th>
+                                                <th>Создан</th>
+                                                <th>Обновлён</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
@@ -52,18 +53,27 @@
                                                 <tr>
                                                     <td>{{ $post->id }}</td>
                                                     <td>{{ $post->title }}</td>
-                                                    <td>{{ $post->category_id }}</td>
                                                     <td>{{ $post->category->title }}</td>
-                                                    <td>{{ $post->tags }}</td>
+                                                    {{-- **
+                * vendor\laravel\framework\src\Illuminate\Support\Collection.php
+                * public function join($glue, $finalGlue = '')
+                *
+                * Join all items from the collection using a string. The final items can use a separate glue string.
+                *
+                * @param  string  $glue
+                * @param  string  $finalGlue
+                * @return string
+                */ --}}
+                                                    <td>{{ $post->tags()->pluck('title')->join(', ') }}</td>
                                                     <td>{{ $post->created_at }}</td>
+                                                    <td>{{ $post->updated_at }}</td>
                                                     <td>
                                                         <a href="{{ route('posts.edit', ['post' => $post->id]) }}"
                                                             class="btn btn-info btn-sm float-left mr-1">
                                                             <i class="fas fa-pencil-alt"></i>
                                                         </a>
 
-                                                        <form
-                                                            action="{{ route('posts.destroy', ['post' => $post->id]) }}"
+                                                        <form action="{{ route('posts.destroy', ['post' => $post->id]) }}"
                                                             method="post" class="float-left">
                                                             @csrf
                                                             @method('DELETE')

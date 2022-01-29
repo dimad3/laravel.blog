@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Post;
 use App\Category;
 use App\Tag;
@@ -17,7 +18,17 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::paginate(3);
+        /**
+         * vendor\laravel\framework\src\Illuminate\Database\Eloquent\Model.php
+         *
+         * public static function with($relations)
+         *
+         * Begin querying a model with eager loading.
+         *
+         * @param  array|string  $relations
+         * @return \Illuminate\Database\Eloquent\Builder
+         */
+        $posts = Post::with(['category', 'tags'])->paginate(10);
 
         /**
          * view() - Get the evaluated view contents for the given view.
@@ -53,6 +64,7 @@ class PostController extends Controller
     {
         /**
          * vendor\laravel\framework\src\Illuminate\Support\Collection.php
+         *
          * public function pluck($value, $key = null)
          *
          * Get the values of a given key.
@@ -86,8 +98,6 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request->hasFile('thumbnail'));
-        //dd($request->file('thumbnail'));
         $request->validate([
             'title' => 'required|max:100',
             'description' => 'required|max:255',
@@ -95,50 +105,10 @@ class PostController extends Controller
             'category_id' => 'required|integer',
             'thumbnail' => 'nullable|image',
         ]);
-        //return;
 
         $data = $request->all();
-        /**
-         * vendor\laravel\framework\src\Illuminate\Http\Concerns\InteractsWithInput.php
-         * public function hasFile($key)
-         *
-         * Determine if the uploaded data contains a file.
-         *
-         * @param  string  $key
-         * @return bool
-         */
-        if ($request->hasFile('thumbnail')) {
-            $folder = date('Y-m-d');
 
-            /**
-             * vendor\laravel\framework\src\Illuminate\Http\UploadedFile.php
-             * public function file($key = null, $default = null)
-             *
-             * Retrieve a file from the request.
-             *
-             * @param  string|null  $key
-             * @param  mixed  $default
-             * @return \Illuminate\Http\UploadedFile|\Illuminate\Http\UploadedFile[]|array|null
-             */
-
-            /**
-             * vendor\laravel\framework\src\Illuminate\Http\UploadedFile.php
-             * public function store($path, $options = [])
-             *
-             * Store the uploaded file on a filesystem disk.
-             * The store method accepts the path where the file should be stored relative to the filesystem's configured root directory.
-             * This path should not contain a file name, since a unique ID will automatically be generated to serve as the file name
-             *
-             * @param  string  $path
-             * @param  array|string  $options
-             * @return string|false
-             */
-            $path = $request->file('thumbnail')->store("images/{$folder}");
-            //dump($path);
-            $data['thumbnail'] = $path;
-            //dump($data);
-        }
-        //dd($request->tags);
+        $data['thumbnail'] = Post::uploadImage($request);
 
         $post = Post::create($data);
 
@@ -199,9 +169,12 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        dump($id);
-        $tag = Tag::find($id);
-        return view("admin.tags.edit", compact('tag'));
+        $post = Post::find($id);
+        //dd(Category::all());
+        //dd(Category::pluck('title', 'id')->all());
+        $categories = Category::pluck('title', 'id')->all();
+        $tags = Tag::pluck('title', 'id')->all();
+        return view("admin.posts.edit", compact('post', 'categories', 'tags'));
     }
 
     /**
@@ -214,37 +187,59 @@ class PostController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'title' => 'required|unique:categories|max:50',
+            'title' => 'required|max:100',
+            'description' => 'required|max:255',
+            'content' => 'required',
+            'category_id' => 'required|integer',
+            'thumbnail' => 'nullable|image',
         ]);
 
-        $tag = Tag::find($id);
-        // $category->slug = null;
+        $post = Post::find($id);
+        //dd($request->all());
+        $data = $request->all();
+        $data['thumbnail'] = Post::uploadImage($request, $post->thumbnail);
 
-        // The `update` method expects an array of column and value pairs
-        // representing the columns that should be updated
+        $post->update($data);
 
         /**
-         * public function all($keys = null)
+         * vendor\laravel\framework\src\Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithPivotTable.php
          *
-         * Get all of the input and files for the request.
+         * public function sync($ids, $detaching = true)
          *
-         * @param  array|mixed|null  $keys
+         * Sync the intermediate tables with a list of IDs or collection of models.
+         *
+         * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Model|array  $ids
+         * @param  bool  $detaching
          * @return array
          */
-        $tag->update($request->all());
-
-        // $request->session()->flash('success', 'Category was updated!!!');
+        $post->tags()->sync($request->tags);
 
         /**
+         * vendor\laravel\framework\src\Illuminate\Routing\Redirector.php
+         *
+         * public function route($route, $parameters = [], $status = 302, $headers = [])
+         *
+         * Create a new redirect response to a named route.
+         *
+         * @param  string  $route
+         * @param  mixed  $parameters
+         * @param  int  $status
+         * @param  array  $headers
+         * @return \Illuminate\Http\RedirectResponse
+         */
+
+        /**
+         * vendor\laravel\framework\src\Illuminate\Http\RedirectResponse.php
+         *
          * public function with($key, $value = null)
          *
          * Flash a piece of data to the session.
          *
          * @param  string|array  $key
          * @param  mixed  $value
-         * @return $this
+         * @return $this (\Illuminate\Http\RedirectResponse)
          */
-        return redirect()->route('tags.index')->with('success', 'Tag was updated!!!');
+        return redirect()->route('posts.index')->with('success', 'Post was updated!!!');
     }
 
     /**
@@ -255,7 +250,15 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        Tag::destroy($id);
+        $post = Post::find($id);
+        // dd(asset("uploads/{$post->thumbnail}"));
+        $post->tags()->sync([]);
+        //return;
+
+        // https: //laravel.com/docs/7.x/filesystem#deleting-files
+        Storage::delete($post->thumbnail);
+
+        Post::destroy($id);
         /**
          * public function with($key, $value = null)
          *
@@ -265,6 +268,6 @@ class PostController extends Controller
          * @param  mixed  $value
          * @return $this
          */
-        return redirect()->route('tags.index')->with('success', 'Tag was deleted!!!');
+        return redirect()->route('posts.index')->with('success', "Post [id = {$id}] was deleted!!!");
     }
 }
