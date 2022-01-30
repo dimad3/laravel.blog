@@ -28,7 +28,7 @@ class PostController extends Controller
          * @param  array|string  $relations
          * @return \Illuminate\Database\Eloquent\Builder
          */
-        $posts = Post::with(['category', 'tags'])->paginate(10);
+        $posts = Post::with('category', 'tags')->paginate(10);
 
         /**
          * view() - Get the evaluated view contents for the given view.

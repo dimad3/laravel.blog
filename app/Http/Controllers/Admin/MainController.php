@@ -9,10 +9,6 @@ class MainController extends Controller
 {
     public function index()
     {
-        Category::create([
-            'title' => 'My Awesome Blog Post',
-        ]);
-
         // https://laravel.com/docs/7.x/helpers#method-view
         /**
          * Get the evaluated view contents for the given view.

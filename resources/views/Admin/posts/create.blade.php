@@ -46,8 +46,7 @@
 
             <div class="form-group">
                 <label for='category_id'>Категория</label>
-                <select name='category_id' id='category_id' class="form-control @error('category_id') is-invalid @enderror"
-                    value={{ old('category_id') }}>
+                <select name='category_id' id='category_id' class="form-control @error('category_id') is-invalid @enderror">
                     <option value=""></option>
                     @foreach ($categories as $key => $value)
                         <option value="{{ $key }}" {{ old('category_id') == $key ? 'selected' : '' }}>

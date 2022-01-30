@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('home');
 
 
 Route::prefix('admin')->namespace('Admin')->group(function () {
@@ -46,3 +46,6 @@ Route::prefix('admin')->namespace('Admin')->group(function () {
     Route::resource('tags', 'TagController');
     Route::resource('posts', 'PostController');
 });
+
+Route::get('/register', 'UserController@create')->name('register.create');
+Route::post('/register', 'UserController@store')->name('register.store');
