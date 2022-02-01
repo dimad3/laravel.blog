@@ -18,7 +18,7 @@ Route::get('/', function () {
 })->name('home');
 
 
-Route::prefix('admin')->namespace('Admin')->group(function () {
+Route::prefix('admin')->namespace('Admin')->middleware('admin')->group(function () {
     // Matches The "/admin/users" URL
     // Controllers Within The "App\Http\Controllers\Admin" Namespace
 
@@ -47,5 +47,11 @@ Route::prefix('admin')->namespace('Admin')->group(function () {
     Route::resource('posts', 'PostController');
 });
 
-Route::get('/register', 'UserController@create')->name('register.create');
-Route::post('/register', 'UserController@store')->name('register.store');
+Route::middleware('guest')->group(function () {
+    Route::get('/register', 'UserController@create')->name('register.create');
+    Route::post('/register', 'UserController@store')->name('register.store');
+    Route::get('/login', 'UserController@loginForm')->name('login.create');
+    Route::post('/login', 'UserController@login')->name('login');
+});
+
+Route::get('/logout', 'UserController@logout')->name('logout')->middleware('auth');

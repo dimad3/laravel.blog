@@ -18,8 +18,31 @@ class RedirectIfAuthenticated
      */
     public function handle($request, Closure $next, $guard = null)
     {
+        /**
+         * Illuminate\Support\Facades\Auth::guard
+         *
+         * public static function guard($name = null) { }
+         *
+         * At its core, Laravel's authentication facilities are made up of "guards" and "providers".
+         * Guards define how users are authenticated for each request.
+         * For example, Laravel ships with a session guard which maintains state using session storage and cookies.
+         *
+         * @param  @param string|null $name
+         *
+         * @return \Illuminate\Contracts\Auth\Guard|\Illuminate\Contracts\Auth\StatefulGuard
+         */
         if (Auth::guard($guard)->check()) {
-            return redirect(RouteServiceProvider::HOME);
+            /**
+             * vendor\laravel\framework\src\Illuminate\Routing\Redirector.php
+             *
+             * public function home($status = 302)
+             *
+             * Create a new redirect response to the "home" nemed-route.
+             *
+             * @param  int  $status
+             * @return \Illuminate\Http\RedirectResponse
+             */
+            return redirect()->home();
         }
 
         return $next($request);

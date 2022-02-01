@@ -163,7 +163,12 @@
                             alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">Alexander Pierce</a>
+                        @auth
+                            <a href="#">{{ Auth::user()->name }}</a><br>
+                            <a href="{{ route('logout') }}">Logout</a>
+                        @else
+                            <a href="{{ route('login') }}">Login</a>
+                        @endauth
                     </div>
                 </div>
 

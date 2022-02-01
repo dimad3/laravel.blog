@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>AdminLTE 3 | Registration Page</title>
+    <title>Login Page</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -21,7 +21,7 @@
 
         <div class="card">
             <div class="card-body register-card-body">
-                <p class="login-box-msg">Register a new membership</p>
+                <p class="login-box-msg">Login form</p>
 
                 <div class="container">
                     <div class="row">
@@ -34,25 +34,21 @@
                                         @endforeach
                                     </ul>
                                 </div>
+                            @elseif (session()->has('logInError'))
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        <li>{{ session('logInError') }}</li>
+                                    </ul>
+                                </div>
                             @endif
                         </div>
                     </div>
                 </div>
 
-                <form action="{{ route('register.store') }}" method="post">
+                <form action="{{ route('login') }}" method="post">
                     @csrf
                     <div class="input-group mb-3">
-                        <input type="text" name="name" class="form-control" value="{{ old('name') }}"
-                            placeholder="Full name">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-user"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="input-group mb-3">
-                        <input type="email" name="email" class="form-control" value="{{ old('email') }}"
-                            placeholder="Email">
+                        <input type="email" name="email" class="form-control" placeholder="Email">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-envelope"></span>
@@ -67,25 +63,15 @@
                             </div>
                         </div>
                     </div>
-                    <div class="input-group mb-3">
-                        <input type="password" name="password_confirmation" class="form-control"
-                            placeholder="Retype password">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-lock"></span>
-                            </div>
-                        </div>
-                    </div>
                     <div class="row">
                         <!-- /.col -->
                         <div class="col-4">
-                            <button type="submit" class="btn btn-primary btn-block">Register</button>
+                            <button type="submit" class="btn btn-primary btn-block">Login</button>
                         </div>
                         <!-- /.col -->
                     </div>
                 </form>
 
-                <a href="{{ route('login') }}" class="text-center">I already have a membership</a>
             </div>
             <!-- /.form-box -->
         </div><!-- /.card -->
