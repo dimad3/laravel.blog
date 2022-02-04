@@ -316,6 +316,23 @@
             }
         });
     </script>
+    <script src="{{ asset('assets/admin/ckeditor5-32.0.0/build/ckeditor.js') }}"></script>
+
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#content'))
+            .catch(error => {
+                console.error(error);
+            });
+
+    ClassicEditor
+    .create( document.querySelector( '#description' ), {
+    toolbar: [ 'heading', '|', 'bold', 'italic', '|', 'undo', 'redo' ]
+    } )
+    .catch( function( error ) {
+    console.error( error );
+    } );
+    </script>
 
 </body>
 

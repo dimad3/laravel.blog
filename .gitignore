@@ -6,6 +6,8 @@
 /.vscode
 /resources/assets
 /public/uploads
+/public/assets/admin/ckeditor5-32.0.0
+/public/assets/front
 #.env
 .env.backup
 .phpunit.result.cache
