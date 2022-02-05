@@ -16,7 +16,7 @@ class CategoryController extends Controller
     public function index()
     {
         // $categories  = ['cat1', 'cat2', 'cat3'];
-        dump(session()->all());
+        // dump(session()->all());
         $categories = Category::paginate(20);
 
         /**
@@ -51,7 +51,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        dump(session()->all());
+        // dump(session()->all());
         return view('admin.categories.create');
     }
 
@@ -100,9 +100,9 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        dump($id);
+        // dump($id);
         $category = Category::find($id);
-        dump($category);
+        // dump($category);
         return view("admin.categories.edit", compact('category'));
     }
 
@@ -157,6 +157,10 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
+        if (Category::find($id)->posts->count()) {
+            return redirect()->route('categories.index')->with('error', 'Category can NOT be deleted because it is asigned to the post(s)!!!');
+        }
+
         Category::destroy($id);
         /**
          * public function with($key, $value = null)

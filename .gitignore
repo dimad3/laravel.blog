@@ -6,7 +6,7 @@
 /.vscode
 /resources/assets
 /public/uploads
-/public/assets/admin/ckeditor5-32.0.0
+/public/assets/admin
 /public/assets/front
 #.env
 .env.backup

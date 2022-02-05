@@ -105,8 +105,8 @@ class Post extends Model
              */
             $path = $request->file('thumbnail')->store("images/{$folder}");
             return $path;
-        } elseif ($request->hasFile('thumbnail') === false && $image !== null) {
-            return $image;
+        // } elseif ($request->hasFile('thumbnail') === false && $image !== null) {
+        //     return $image;
         }
         // https: //laravel.com/docs/7.x/filesystem#deleting-files
         // Storage::delete($image);

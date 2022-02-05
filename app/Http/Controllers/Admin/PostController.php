@@ -197,7 +197,12 @@ class PostController extends Controller
         $post = Post::find($id);
         //dd($request->all());
         $data = $request->all();
-        $data['thumbnail'] = Post::uploadImage($request, $post->thumbnail);
+
+        //dump($data);
+        if ($file = Post::uploadImage($request, $post->thumbnail)) {
+            $data['thumbnail'] = $file;
+        }
+        //dd($data);
 
         $post->update($data);
 

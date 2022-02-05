@@ -153,6 +153,10 @@ class TagController extends Controller
      */
     public function destroy($id)
     {
+        if (Tag::find($id)->posts->count()) {
+            return redirect()->route('tags.index')->with('error', 'Tag can NOT be deleted because it is asigned to the post(s)!!!');
+        }
+
         Tag::destroy($id);
         /**
          * public function with($key, $value = null)

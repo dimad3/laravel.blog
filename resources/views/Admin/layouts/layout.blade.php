@@ -280,6 +280,10 @@
                             <div class="alert alert-success">
                                 {{ session('success') }}
                             </div>
+                        @elseif (session('error'))
+                            <div class="alert alert-danger">
+                                {{ session('error') }}
+                            </div>
                         @endif
                     </div>
                 </div>
@@ -316,6 +320,7 @@
             }
         });
     </script>
+
     <script src="{{ asset('assets/admin/ckeditor5-32.0.0/build/ckeditor.js') }}"></script>
 
     <script>
@@ -325,13 +330,19 @@
                 console.error(error);
             });
 
-    ClassicEditor
-    .create( document.querySelector( '#description' ), {
-    toolbar: [ 'heading', '|', 'bold', 'italic', '|', 'undo', 'redo' ]
-    } )
-    .catch( function( error ) {
-    console.error( error );
-    } );
+        ClassicEditor
+            .create(document.querySelector('#description'), {
+                toolbar: ['heading', '|', 'bold', 'italic', '|', 'undo', 'redo']
+            })
+            .catch(function(error) {
+                console.error(error);
+            });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            bsCustomFileInput.init();
+        });
     </script>
 
 </body>
