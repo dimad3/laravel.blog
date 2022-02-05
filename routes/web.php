@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 // })->name('home');
 
 Route::get('/', 'PostController@index')->name('home');
-Route::get('/article', 'PostController@show')->name('posts.single');
+Route::get('/article/{slug}', 'PostController@show')->name('posts.single');
 
 Route::prefix('admin')->namespace('Admin')->middleware('admin')->group(function () {
     // Matches The "/admin/users" URL

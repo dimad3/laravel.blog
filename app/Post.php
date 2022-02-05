@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Carbon;
 
 class Post extends Model
 {
@@ -120,4 +121,7 @@ class Post extends Model
         }
         return asset('no-image.jpg');
     }
+
+    public function getPostDate(){
+        return Carbon::createFromFormat('Y-m-d H:i:s', $this->created_at)->format('d F, Y');    }
 }

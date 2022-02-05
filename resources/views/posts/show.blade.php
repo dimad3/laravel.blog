@@ -1,4 +1,7 @@
 @extends('layouts.layout')
+
+@section('title', '{{ $post->title }}')
+
 @section('content')
     <div class="page-wrapper">
         <div class="blog-title-area">
@@ -11,7 +14,7 @@
 
             <span class="color-yellow"><a href="marketing-category.html" title="">Lifestyle</a></span>
 
-            <h3>The golden rules you need to know for a positive life</h3>
+            <h3>{{$post->title}}</h3>
 
             <div class="blog-meta big-meta">
                 <small><a href="marketing-single.html" title="">21 July, 2017</a></small>

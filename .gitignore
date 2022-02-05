@@ -5,9 +5,9 @@
 /vendor
 /.vscode
 /resources/assets
+/public/assets
 /public/uploads
-/public/assets/admin
-/public/assets/front
+#/public/assets/front
 #.env
 .env.backup
 .phpunit.result.cache
