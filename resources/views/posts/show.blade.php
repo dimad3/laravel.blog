@@ -20,8 +20,8 @@
             <h3>{{ $post->title }}</h3>
 
             <div class="blog-meta big-meta">
-                <small><a href="marketing-single.html" title="">{{ $post->getPostDate() }}</a></small>
-                <small><a href="#" title=""><i class="fa fa-eye"></i> {{ $post->views }}</a></small>
+                <small>{{ $post->getPostDate() }}</a></small>
+                <small><i class="fa fa-eye"></i> {{ $post->views }}</a></small>
             </div><!-- end meta -->
 
             <div class="post-sharing">
@@ -36,7 +36,7 @@
         </div><!-- end title -->
 
         <div class="single-post-media">
-            <img src="upload/market_blog_06.jpg" alt="" class="img-fluid">
+            <img src="{{ $post->getImage() }}" alt="{{ $post->slug }}" class="img-fluid">
         </div><!-- end media -->
 
         <div class="blog-content">
@@ -199,4 +199,12 @@
             </div>
         </div>
     </div><!-- end page-wrapper -->
+@endsection
+
+@section('sidebar')
+    @include('layouts.sidebar')
+@endsection
+
+@section('row')
+    @include('layouts.row1')
 @endsection

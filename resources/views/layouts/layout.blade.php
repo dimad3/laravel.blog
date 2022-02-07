@@ -45,21 +45,12 @@
                             src="assets/front/images/version/market-logo.png" alt=""></a>
                     <div class="collapse navbar-collapse" id="navbarCollapse">
                         <ul class="navbar-nav mr-auto">
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('home') }}">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="marketing-category.html">Marketing</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="marketing-category.html">Make Money</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="marketing-blog.html">Blog</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="marketing-contact.html">Contact Us</a>
-                            </li>
+                            @foreach ($categories as $category)
+                                <li class="nav-item">
+                                    <a class="nav-link"
+                                        href="{{ route('categories.single', ['slug' => $category->slug]) }}">{{ $category->title }}</a>
+                                </li>
+                            @endforeach
                         </ul>
                         <form class="form-inline">
                             <input class="form-control mr-sm-2" type="text" placeholder="How may I help?">
@@ -73,14 +64,10 @@
         @yield('header')
 
         <section class="section lb @if (!Request::is('/')) m3rem @endif">
+
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
-                        @yield('content')
-                    </div><!-- end col -->
-                    <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
-                        @include('layouts.sidebar')
-                    </div><!-- end col -->
+                    @yield('row')
                 </div><!-- end row -->
             </div><!-- end container -->
         </section>
