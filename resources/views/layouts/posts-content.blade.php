@@ -26,7 +26,7 @@
                     <h4><a href="{{ route('posts.single', ['slug' => $post->slug]) }}"
                             title="">{{ $post->title }}</a></h4>
                     <p>{!! $post->description !!}</p>
-                    <small><a href="marketing-category.html" title="">{{ $post->category->title }}</a></small>
+                    <small><a href="{{route('categories.single', ['slug' => $post->category->slug])}}" title="">{{ $post->category->title }}</a></small>
                     <small>{{ $post->getPostDate() }}</small>
                     <small><i class="fa fa-eye"></i>{{ $post->views }}</small>
                 </div><!-- end meta -->

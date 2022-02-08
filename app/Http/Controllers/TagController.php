@@ -4,14 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Category;
+use App\Tag;
 
-class CategoryController extends Controller
+class TagController extends Controller
 {
     public function show($slug)
     {
         // https://laravel.com/docs/7.x/collections#method-where
-        $category = Category::where('slug', $slug)->firstOrFail();
-        $posts = $category->posts()->with('category')->orderBy('created_at', 'desc')->paginate(5);
+        $tag = Tag::where('slug', $slug)->firstOrFail();
+        $posts = $tag->posts()->with('category')->orderBy('created_at', 'desc')->paginate(10);
 
         /**
          * vendor\laravel\framework\src\Illuminate\Database\Eloquent\Model.php
@@ -25,6 +26,6 @@ class CategoryController extends Controller
          */
         $categories = Category::all();
         //dd(compact('posts'));
-        return view('categories.show', compact('category', 'posts', 'categories'));
+        return view('tags.show', compact('tag', 'posts', 'categories'));
     }
 }

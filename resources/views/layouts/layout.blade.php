@@ -61,7 +61,7 @@
             </div><!-- end container-fluid -->
         </header><!-- end market-header -->
 
-        @yield('header')
+        @yield('page-title')
 
         <section class="section lb @if (!Request::is('/')) m3rem @endif">
 
