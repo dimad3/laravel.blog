@@ -23,8 +23,6 @@ class CategoryController extends Controller
          * @param  array|mixed  $columns
          * @return \Illuminate\Database\Eloquent\Collection|static[]
          */
-        $categories = Category::all();
-        //dd(compact('posts'));
-        return view('categories.show', compact('category', 'posts', 'categories'));
+        return view('categories.show', compact('category', 'posts'));
     }
 }

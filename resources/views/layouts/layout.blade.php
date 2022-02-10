@@ -42,10 +42,10 @@
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <a class="navbar-brand" href="{{ route('home') }}"><img
-                            src="assets/front/images/version/market-logo.png" alt=""></a>
+                            src="/assets/front/images/version/market-logo.png" alt=""></a>
                     <div class="collapse navbar-collapse" id="navbarCollapse">
                         <ul class="navbar-nav mr-auto">
-                            @foreach ($categories as $category)
+                            @foreach ($cats as $category)
                                 <li class="nav-item">
                                     <a class="nav-link"
                                         href="{{ route('categories.single', ['slug' => $category->slug]) }}">{{ $category->title }}</a>
@@ -61,6 +61,7 @@
             </div><!-- end container-fluid -->
         </header><!-- end market-header -->
 
+        @yield('header')
         @yield('page-title')
 
         <section class="section lb @if (!Request::is('/')) m3rem @endif">

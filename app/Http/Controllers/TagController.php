@@ -24,8 +24,6 @@ class TagController extends Controller
          * @param  array|mixed  $columns
          * @return \Illuminate\Database\Eloquent\Collection|static[]
          */
-        $categories = Category::all();
-        //dd(compact('posts'));
-        return view('tags.show', compact('tag', 'posts', 'categories'));
+        return view('tags.show', compact('tag', 'posts'));
     }
 }

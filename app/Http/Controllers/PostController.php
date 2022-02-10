@@ -75,7 +75,6 @@ class PostController extends Controller
          * @param  array|mixed  $columns
          * @return \Illuminate\Database\Eloquent\Collection|static[]
          */
-        $categories = Category::all();
-        return view('posts.show', compact('post', 'categories'));
+        return view('posts.show', compact('post'));
     }
 }
