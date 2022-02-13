@@ -16,6 +16,7 @@ class Post extends Model
 
     protected $fillable = ['title', 'description', 'content', 'category_id', 'thumbnail'];
 
+
     /**
      * The tags that belong to the Post
      *
@@ -46,6 +47,7 @@ class Post extends Model
         return $this->belongsTo(Category::class);
     }
 
+
     /**
      * Return the sluggable configuration array for this model.
      *
@@ -59,6 +61,7 @@ class Post extends Model
             ]
         ];
     }
+
 
     public static function uploadImage(Request $request, string $image = null)
     {
@@ -106,13 +109,14 @@ class Post extends Model
              */
             $path = $request->file('thumbnail')->store("images/{$folder}");
             return $path;
-        // } elseif ($request->hasFile('thumbnail') === false && $image !== null) {
-        //     return $image;
+            // } elseif ($request->hasFile('thumbnail') === false && $image !== null) {
+            //     return $image;
         }
         // https: //laravel.com/docs/7.x/filesystem#deleting-files
         // Storage::delete($image);
         return null;
     }
+
 
     public function getImage()
     {
@@ -122,6 +126,21 @@ class Post extends Model
         return asset('no-image.jpg');
     }
 
-    public function getPostDate(){
-        return Carbon::createFromFormat('Y-m-d H:i:s', $this->created_at)->format('d F, Y');    }
+
+    public function getPostDate()
+    {
+        return Carbon::createFromFormat('Y-m-d H:i:s', $this->created_at)->format('d F, Y');
+    }
+
+
+    /**
+     * Scope a query to only include posts with search criteria.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSearch($query, $search)
+    {
+        return $query->where('title', 'LIKE', "%%{$search}%%")->with('category');
+    }
 }

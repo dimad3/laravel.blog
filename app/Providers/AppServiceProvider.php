@@ -85,6 +85,7 @@ class AppServiceProvider extends ServiceProvider
                 // https://laravel.com/api/7.x/Illuminate/Support/Facades/Cache.html#method_put
                 Cache::put('cats', $cats, 30);
             }
+
             $view->with('cats', $cats);
         });
     }

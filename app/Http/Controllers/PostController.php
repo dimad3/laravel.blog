@@ -4,17 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Post;
-use App\Category;
 
 class PostController extends Controller
 {
     public function index()
     {
         //$posts = Post::with('category');
-        $posts = Post::with('category')->orderBy('created_at', 'desc')->paginate(10);
+        $posts = Post::with('category')->orderBy('created_at', 'desc')->paginate(5);
         //dd (compact('posts'));
-        $categories = Category::all();
-        return view('posts.index', compact('posts', 'categories'));
+        return view('posts.index', compact('posts'));
     }
 
     public function show($slug)
@@ -76,5 +74,17 @@ class PostController extends Controller
          * @return \Illuminate\Database\Eloquent\Collection|static[]
          */
         return view('posts.show', compact('post'));
+    }
+
+    public function search(Request $request)
+    {
+        $request->validate([
+            's' => 'required',
+        ]);
+
+        $search = $request->s;
+        // $posts = Post::where('title', 'LIKE', "%%{$search}%%")->with('category')->orderBy('created_at', 'desc')->paginate(5);
+        $posts = Post::search($search)->orderBy('created_at', 'desc')->paginate(5);
+        return view('posts.search', compact('posts', 'search'));
     }
 }

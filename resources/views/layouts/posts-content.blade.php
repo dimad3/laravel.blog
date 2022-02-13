@@ -26,7 +26,8 @@
                     <h4><a href="{{ route('posts.single', ['slug' => $post->slug]) }}"
                             title="">{{ $post->title }}</a></h4>
                     <p>{!! $post->description !!}</p>
-                    <small><a href="{{route('categories.single', ['slug' => $post->category->slug])}}" title="">{{ $post->category->title }}</a></small>
+                    <small><a href="{{ route('categories.single', ['slug' => $post->category->slug]) }}"
+                            title="">{{ $post->category->title }}</a></small>
                     <small>{{ $post->getPostDate() }}</small>
                     <small><i class="fa fa-eye"></i>{{ $post->views }}</small>
                 </div><!-- end meta -->
@@ -42,7 +43,35 @@
 <div class="row">
     <div class="col-md-12">
         <nav aria-label="Page navigation">
-            {{ $posts->links() }}
+            @if (isset($search))
+                @php
+                    /**
+                     * vendor\laravel\framework\src\Illuminate\Contracts\Pagination\Paginator.php
+                     *
+                     * public function appends($key, $value = null);
+                     *
+                     * Add a set of query string values to the paginator.
+                     *
+                     * @param  array|string  $key
+                     * @param  string|null  $value
+                     * @return $this
+                    */
+                    /**
+                     * vendor\laravel\framework\src\Illuminate\Foundation\helpers.php
+                     *
+                     * function request($key = null, $default = null)
+                     *
+                     * Get an instance of the current request or an input item from the request.
+                     *
+                     * @param  array|string|null  $key
+                     * @param  mixed  $default
+                     * @return \Illuminate\Http\Request|string|array
+                    */
+                @endphp
+                {{ $posts->appends(['s' => request()->s])->links() }}
+            @else
+                {{ $posts->links() }}
+            @endif
         </nav>
     </div><!-- end col -->
 </div><!-- end row -->
